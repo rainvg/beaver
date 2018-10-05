@@ -1,0 +1,22 @@
+{
+  "name": "beaver",
+  "version": "1.0.0",
+  "description": "A Docker-based test framework for Buck-buildable networking applications",
+  "main": "src/main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rainvg/beaver.git"
+  },
+  "keywords": [
+    "test",
+    "network",
+    "docker",
+    "buck"
+  ],
+  "author": "Distributed Computing Laboratory - EPFL",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/rainvg/beaver/issues"
+  },
+  "homepage": "https://github.com/rainvg/beaver#readme"
+}
