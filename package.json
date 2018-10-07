@@ -18,5 +18,10 @@
   "bugs": {
     "url": "https://github.com/rainvg/beaver/issues"
   },
-  "homepage": "https://github.com/rainvg/beaver#readme"
+  "homepage": "https://github.com/rainvg/beaver#readme",
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "dockerode": "^2.5.7",
+    "fs-extra": "^7.0.0"
+  }
 }

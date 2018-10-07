@@ -1,4 +1,9 @@
 
+### Costum ###
+
+# Test report directory
+report
+
 # Created by https://www.gitignore.io/api/osx,node,linux,windows
 
 ### Linux ###
