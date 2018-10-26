@@ -20,10 +20,21 @@ var report = new _report();
         var container = await dockerode.container.start('beaver-main', volume_path);
 
         console.log(utils.info('Building project...'));
+
+        const cmd_buckaroo = ['bash', '-c', 'buckaroo install'];
+        var buckaroo_ret = await dockerode.exec.run(container, cmd_buckaroo, true);
+        if (buckaroo_ret["ret"] !== 0)
+            throw '`buckaroo install` failed.';
+
+        await container.putArchive('./assets/buckconfig.local.tar', {
+            path: '/code',
+            noOverwriteDirNonDir: false
+        });
+
         const cmd_build = ['buck', 'build', ':test', '--out', '/code/test'];
         var build_ret = await dockerode.exec.run(container, cmd_build, true);
         if (build_ret["ret"] !== 0)
-            throw 'Build failed.';
+            throw '`buck build :test` failed.';
 
         console.log(utils.info('Retrieving test configuration...'));
         const cmd_run_test = ['bash', '-c', './test configuration'];
