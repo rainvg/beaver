@@ -73,6 +73,8 @@ module.exports = function()
 
     self.generate = async function(results)
     {
+        await fs.remove('./report');
+
         await fs.outputFile('./report/index.html', main.start());
         var index = fs.createWriteStream('./report/index.html', {'flags': 'a'});
 
