@@ -138,7 +138,7 @@ module.exports = function ()
                 if(data.ExitCode !== null)
                     break;
 
-                await utils.wait(1000);
+                await utils.wait(100);
                 data = await e.inspect();
             }
 

@@ -1,4 +1,5 @@
 const fs = require('fs-extra');
+const path = require('path');
 
 module.exports = function()
 {
@@ -25,12 +26,12 @@ module.exports = function()
                     </thead><tbody>\n';
         },
 
-        row: function(t, passing, failing)
+        row: function(tpath, t, passing, failing)
         {
             var html = '<tr style="background-color: rgba(';
             html += failing === 0 ? success : fail;
             html += ')"> \n\
-                    <td><a href="./' + t + '.html">' + t + ' </a></td> \n\
+                    <td><a href="./' + tpath + '.html">' + t + ' </a></td> \n\
                     <td>' + (passing + failing) + '</td><td>' + passing + '</td><td>' + failing + '</td>\n';
 
             return html;
@@ -52,12 +53,12 @@ module.exports = function()
                     <h2>' + t + '</h2>\n';
         },
 
-        instance: function(t, i, passing)
+        instance: function(tpath, i, passing)
         {
             var html = '<span style="text-align: center; background-color: rgba(';
             html += passing ? success : fail;
             html += '); width: 75px; padding: 5px; display: inline-block; margin-bottom: 3px" > \n\
-                     <a href="./' + t + '/instance_' + i + '.txt" />Instance ' + i + '</a> \n\
+                     <a href="' + tpath + '"/>Instance ' + i + '</a> \n\
                      </span>\n'
 
             return html;
@@ -80,6 +81,7 @@ module.exports = function()
 
         for (t in results)
         {
+            tpath = t.replace(/\//g, '-');
             await fs.outputFile('./report/'+ t + '.html', test.start(t));
             var test_index = fs.createWriteStream('./report/'+ t + '.html', {'flags': 'a'});
 
@@ -87,19 +89,19 @@ module.exports = function()
             var passing = 0;
             for (i in results[t])
             {
-                var path = './report/' + t + '/instance_' + i + '.txt';
-                fs.outputFile(path, results[t][i]["out"], () => {});
+                var tpath = './report/' + t + '/instance_' + i + '.txt';
+                fs.outputFile(tpath, results[t][i]["out"], () => {});
 
                 if (results[t][i]["ret"] === 0)
                     passing++;
                 else
                     failing++;
 
-                test_index.write(test.instance(t, i, results[t][i]["ret"] === 0));
+                test_index.write(test.instance(path.resolve(tpath), i, results[t][i]["ret"] === 0));
             }
 
             test_index.end(test.end());
-            index.write(main.row(t, passing, failing));
+            index.write(main.row(t, t, passing, failing));
         }
 
         index.end(main.end());
