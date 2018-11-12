@@ -9,6 +9,8 @@ var report = new _report();
 
 (async function()
 {
+    code = 0;
+
     try
     {
         if (process.argv.length !== 3)
@@ -59,10 +61,14 @@ var report = new _report();
         var err = (e.name && e.message) ? (e.name + ': '  + e.message) : utils.emphasize('ERR: ') + e;
 
         console.log(utils.error(err));
+
+        code = 1;
     }
     finally
     {
         console.log(utils.info('Cleaning up...'));
         await dockerode.container.cleanup();
+
+        process.exit(code);
     }
 })();
