@@ -89,8 +89,9 @@ module.exports = function()
             var passing = 0;
             for (i in results[t])
             {
-                var tpath = './report/' + t + '/instance_' + i + '.txt';
-                fs.outputFile(tpath, results[t][i]["out"], () => {});
+                var tpath = './report/' + t + '/instance_' + i + '.html';
+                fs.outputFile(tpath, '<h1>' + t + ' - Instance ' + i + '</h1>', () => {});
+                fs.outputFile(tpath, '<p>' + results[t][i]["out"] + '</p>', () => {});
 
                 if (results[t][i]["ret"] === 0)
                     passing++;
