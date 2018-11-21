@@ -89,7 +89,7 @@ module.exports = function()
             var passing = 0;
             for (i in results[t])
             {
-                var tpath = t.split("/").slice(-1)[0] + '/instance_' + i + '.html';
+                var tpath = './report/' + t + '/instance_' + i + '.html';
                 fs.outputFile(tpath, '<html><head><h1>' + t + ' - Instance ' + i + '</h1></head>' +
                     '<body><p>' + results[t][i]["out"] + '</p></body></htmL>', () => {});
 
@@ -98,7 +98,8 @@ module.exports = function()
                 else
                     failing++;
 
-                test_index.write(test.instance(path.resolve(tpath), i, results[t][i]["ret"] === 0));
+                const rel_path = t.split("/").slice(-1)[0] + '/instance_' + i + '.html'
+                test_index.write(test.instance(rel_path, i, results[t][i]["ret"] === 0));
             }
 
             test_index.end(test.end());
