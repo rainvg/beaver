@@ -90,15 +90,14 @@ module.exports = function()
             for (i in results[t])
             {
                 var tpath = './report/' + t + '/instance_' + i + '.html';
-                fs.outputFile(tpath, '<html><head><h1>' + t + ' - Instance ' + i + '</h1></head>' +
-                    '<body><p>' + results[t][i]["out"] + '</p></body></htmL>', () => {});
+                fs.outputFile(tpath, '<html><head><h1>' + t + ' - Instance ' + i + '</h1></head>' + '<body><p>' + results[t][i]["out"] + '</p></body></html>\n', () => {});
 
                 if (results[t][i]["ret"] === 0)
                     passing++;
                 else
                     failing++;
 
-                const rel_path = t.split("/").slice(-1)[0] + '/instance_' + i + '.html'
+                const rel_path = './' + t.split("/").slice(-1)[0] + '/instance_' + i + '.html'
                 test_index.write(test.instance(rel_path, i, results[t][i]["ret"] === 0));
             }
 
