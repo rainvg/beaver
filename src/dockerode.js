@@ -89,8 +89,12 @@ module.exports = function ()
                 }
 
                 results[t] = await Promise.all(promises).then();
-                fail += results[t]['ret']
-
+                
+		for (var i = 0; i < configuration[t]["instances"]; i++)
+		{
+		    fail += results[t][i]['ret'];
+		}
+		
                 await utils.test.summary(t, results[t]);
             }
 
@@ -148,3 +152,4 @@ module.exports = function ()
         }
     };
 };
+

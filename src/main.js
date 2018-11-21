@@ -69,7 +69,7 @@ var report = new _report();
     {
         console.log(utils.info('Cleaning up...'));
         await dockerode.container.cleanup();
-
+	
         process.exit(code);
     }
 })();
