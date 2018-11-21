@@ -6,7 +6,7 @@ var utils = new _utils();
 
 module.exports = function ()
 {
-    
+
     // Self
 
     var self = this;
@@ -75,6 +75,7 @@ module.exports = function ()
 
         run: async function(configuration)
         {
+            var fail = 0
             var results = {};
             for (var t in configuration)
             {
@@ -88,11 +89,12 @@ module.exports = function ()
                 }
 
                 results[t] = await Promise.all(promises).then();
+                fail += results[t]['ret']
 
                 await utils.test.summary(t, results[t]);
             }
 
-            return results;
+            return {results: results, failures: fail};
         }
     };
 

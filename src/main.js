@@ -51,10 +51,11 @@ var report = new _report();
         console.log(utils.info('Setting up test containers...'));
         const instances = await dockerode.test.setup(configuration, volume_path);
 
-        const results = await dockerode.test.run(configuration);
+        const output = await dockerode.test.run(configuration);
+        code = output['failures'];
 
         console.log(utils.info('Writing report files...'));
-        await report.generate(results);
+        await report.generate(output['results']);
     }
     catch (e)
     {
