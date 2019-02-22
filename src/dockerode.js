@@ -1,4 +1,5 @@
 const dockerode = require('dockerode');
+const fs = require('fs-extra');
 const stream = require('stream');
 const _utils = require('./utils.js');
 
@@ -73,6 +74,24 @@ module.exports = function ()
             await Promise.all(promises);
         },
 
+        membership: async function(volume_path)
+        {
+            await fs.remove(volume_path + '/membership');
+            await fs.outputFile(volume_path + '/membership', '');
+            var file = fs.createWriteStream(volume_path + '/membership', {'flags': 'a'});
+
+            for (var i = 0; i < containers.length; i++)
+            {
+                var json = await containers[i].inspect();
+                const ipv4 = json["NetworkSettings"]["IPAddress"];
+                const ipv6 = json["NetworkSettings"]["GlobalIPv6Address"];
+
+                file.write(ipv4 + ' ' + ipv6 + '\n');
+            }
+
+            file.end('');
+        },
+
         run: async function(configuration)
         {
             var fail = 0
@@ -80,21 +99,21 @@ module.exports = function ()
             for (var t in configuration)
             {
                 console.log(utils.info('Running test ' + '\'' + t + '\'...'));
-                const cmd = ['bash', '-c', './test run ' + t];
 
                 var promises = []
                 for (var i = 0; i < configuration[t]["instances"]; i++)
                 {
+                    const cmd = ['bash', '-c', './test run ' + t + ' ' + i + ' ./membership'];
                     promises.push(self.exec.run(containers[i], cmd));
                 }
 
                 results[t] = await Promise.all(promises).then();
-                
+
 		for (var i = 0; i < configuration[t]["instances"]; i++)
 		{
 		    fail += results[t][i]['ret'];
 		}
-		
+
                 await utils.test.summary(t, results[t]);
             }
 
@@ -152,4 +171,3 @@ module.exports = function ()
         }
     };
 };
-

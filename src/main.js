@@ -51,6 +51,9 @@ var report = new _report();
         console.log(utils.info('Setting up test containers...'));
         const instances = await dockerode.test.setup(configuration, volume_path);
 
+        console.log(utils.info('Building membership file...'));
+        await dockerode.test.membership(volume_path);
+
         const output = await dockerode.test.run(configuration);
         code = output['failures'];
 
@@ -69,7 +72,7 @@ var report = new _report();
     {
         console.log(utils.info('Cleaning up...'));
         await dockerode.container.cleanup();
-	
+
         process.exit(code);
     }
 })();
